@@ -27,9 +27,6 @@ app.use(requestLogger);
 // обновление, вместо bodyParser
 app.use(express.json());
 
-app.post("/signup", userCreateValidation, createUser);
-app.post("/signin", userLoginValidation, login);
-app.get("/signout", auth, signout);
 app.all("*", auth, (req, res, next) => {
   next(new StatusNotFound("Не существующий маршрут"));
 });
