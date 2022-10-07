@@ -1,10 +1,10 @@
 const movieRouter = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const movieControllers = require('../controllers/cards');
+const movieControllers = require('../controllers/movies');
 
 // возвращает все сохранённые текущим  пользователем фильмы
 // GET /movies
-movieRouter.get('/movies', movieControllers.getMovies);
+movieRouter.get('/movies', auth, movieControllers.getMovies);
 
 // создаёт фильм с переданными в теле
 // # country, director, duration, year, description, image, trailer, nameRU, nameEN и thumbnail, movieId
@@ -15,17 +15,18 @@ movieRouter.post(
     body: Joi.object().keys({
       country: Joi.string().required().min(2).max(30),
       director: Joi.string().required().min(2).max(30),
-      duration: Joi.string().required().min(2).max(30),
-      year: Joi.string().required().min(2).max(30),
-      description: Joi.string().required().min(2).max(30),
-      image: Joi.string().required().min(2).max(30),
-      trailer: Joi.string().required().regex(regex),
-      nameRU: Joi.string().required().regex(regex),
-      nameEN: Joi.string().required().regex(regex),
-      thumbnail: Joi.string().required().regex(regex),
-      movieId: Joi.string().required().regex(regex),
+      duration: Joi.string().required(),
+      year: Joi.string().required(),
+      description: Joi.string().required(),
+      image: Joi.string().required(),
+      trailer: Joi.string().required(),
+      nameRU: Joi.string().required(),
+      nameEN: Joi.string().required(),
+      thumbnail: Joi.string().required(),
+      movieId: Joi.string().required(),
     }),
   }),
+  auth,
   movieControllers.createMovie,
 );
 
@@ -35,9 +36,10 @@ movieRouter.delete(
   '/:movieId',
   celebrate({
     params: Joi.object().keys({
-      movieId: Joi.string().alphanum().length(24),
+      movieId: Joi.string().required().alphanum().length(24),
     }),
   }),
+  auth,
   movieControllers.deleteMovie,
 );
 
