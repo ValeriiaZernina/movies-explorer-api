@@ -1,8 +1,8 @@
-const { StatusBadRequest } = require("../utils/errors/StatusBadRequest");
-const { StatusNotFound } = require("../utils/errors/StatusNotFound");
-const { ForbiddenError } = require("../utils/errors/ForbiddenError");
-const { STATUS_CREATED } = require("../utils/errors/errorsCode");
-const movieModel = require("../models/movie");
+const { StatusBadRequest } = require('../utils/errors/StatusBadRequest');
+const { StatusNotFound } = require('../utils/errors/StatusNotFound');
+const { ForbiddenError } = require('../utils/errors/ForbiddenError');
+const { STATUS_CREATED } = require('../utils/errors/errorsCode');
+const movieModel = require('../models/movie');
 
 module.exports.getMovies = (req, res, next) => {
   const { _id: id } = req.user;
@@ -10,8 +10,8 @@ module.exports.getMovies = (req, res, next) => {
     .find({ id })
     .then((movies) => res.send(movies))
     .catch((err) => {
-      if (err.name === "CastError") {
-        next(new BadRequestError("Некорректный id"));
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Некорректный id'));
         return;
       }
       next(err);
@@ -51,8 +51,8 @@ module.exports.createMovie = (req, res, next) => {
       res.status(STATUS_CREATED).send(movie);
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        next(new StatusBadRequest("Переданы некорректные данные"));
+      if (err.name === 'ValidationError') {
+        next(new StatusBadRequest('Переданы некорректные данные'));
       } else {
         next(err);
       }
@@ -64,14 +64,14 @@ module.exports.deleteMovie = (req, res, next) => {
   movieModel
     .findById(id)
     .orFail(() => {
-      throw new StatusNotFound("Ничего не удалилось.");
+      throw new StatusNotFound('Ничего не удалилось.');
     })
     .then((movie) => {
       if (!movie.owner.equals(req.user._id)) {
-        throw new ForbiddenError("У вас нет доступа к чужим фильмам.");
+        throw new ForbiddenError('У вас нет доступа к чужим фильмам.');
       }
       return movie.deleteOne();
     })
-    .then(() => res.send({ message: "Карточка удалена." }))
+    .then(() => res.send({ message: 'Карточка удалена.' }))
     .catch(next);
 };
