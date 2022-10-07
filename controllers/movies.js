@@ -11,7 +11,7 @@ module.exports.getMovies = (req, res, next) => {
     .then((movies) => res.send(movies))
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestError('Некорректный id'));
+        next(new StatusBadRequest('Некорректный id'));
         return;
       }
       next(err);

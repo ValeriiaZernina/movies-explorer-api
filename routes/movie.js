@@ -1,5 +1,6 @@
 const movieRouter = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+const auth = require('../middleware/auth');
 const movieControllers = require('../controllers/movies');
 
 // возвращает все сохранённые текущим  пользователем фильмы
@@ -7,7 +8,8 @@ const movieControllers = require('../controllers/movies');
 movieRouter.get('/movies', auth, movieControllers.getMovies);
 
 // создаёт фильм с переданными в теле
-// # country, director, duration, year, description, image, trailer, nameRU, nameEN и thumbnail, movieId
+// # country, director, duration, year, description,
+// image, trailer, nameRU, nameEN и thumbnail, movieId
 // POST /movies
 movieRouter.post(
   '/movies',

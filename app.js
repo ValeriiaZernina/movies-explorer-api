@@ -2,8 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const { celebrate, Joi, errors } = require('celebrate');
+const { errors } = require('celebrate');
 const cors = require('cors');
+const auth = require('./middleware/auth');
+const { handleError } = require('./utils/handleError');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 const { StatusNotFound } = require('./utils/errors/StatusNotFound');
 
