@@ -84,7 +84,7 @@ module.exports.login = (req, res, next) => {
       );
       res
         .cookie(
-          'authorization',
+          'jwt',
           token, // token - наш JWT токен, который мы отправляем
           { maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: false },
         )
@@ -92,13 +92,13 @@ module.exports.login = (req, res, next) => {
     })
     .catch((err) => {
       // очищаем куку при неудачном логине
-      res.clearCookie('authorization');
+      res.clearCookie('jwt');
       next(err); // пробрасываем ошибку дальше в центральный обработчик
     });
 };
 
 module.exports.signout = (req, res) => {
-  res.clearCookie('authorization').send({
+  res.clearCookie('jwt').send({
     message: `Пользователь с id=${req.user._id} успешно вышел из системы`,
   });
 };
