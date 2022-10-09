@@ -1,12 +1,12 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const cookieParser = require("cookie-parser");
-const { errors } = require("celebrate");
-const cors = require("cors");
-const { requestLogger, errorLogger } = require("./middleware/logger");
-const { handleError } = require("./utils/handleError");
-const router = require("./routes/index");
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const { errors } = require('celebrate');
+const cors = require('cors');
+const { requestLogger, errorLogger } = require('./middleware/logger');
+const { handleError } = require('./utils/handleError');
+const router = require('./routes/index');
 
 // запуск на 3000 порту
 const { PORT = 3000 } = process.env;
@@ -14,7 +14,7 @@ const { PORT = 3000 } = process.env;
 const app = express();
 
 // подключаемся к серверу mongo
-mongoose.connect("mongodb://localhost:27017/diplom", {
+mongoose.connect('mongodb://localhost:27017/diplom', {
   useNewUrlParser: true,
 });
 
