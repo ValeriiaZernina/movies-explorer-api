@@ -1,37 +1,32 @@
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const cookieParser = require('cookie-parser');
-const { errors } = require('celebrate');
-const cors = require('cors');
-const auth = require('./middleware/auth');
-const { handleError } = require('./utils/handleError');
-const { requestLogger, errorLogger } = require('./middleware/logger');
-const { StatusNotFound } = require('./utils/errors/StatusNotFound');
+require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
+const { errors } = require("celebrate");
+const cors = require("cors");
+const { requestLogger, errorLogger } = require("./middleware/logger");
+const { handleError } = require("./utils/handleError");
+const router = require("./routes/index");
 
 // запуск на 3000 порту
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
-// Cors
-app.use(cors({}));
-
-app.use(cookieParser());
-
 // подключаемся к серверу mongo
-mongoose.connect('mongodb://localhost:27017/mestodb', {
+mongoose.connect("mongodb://localhost:27017/diplom", {
   useNewUrlParser: true,
 });
 
-// подключаем логгер запросов
-app.use(requestLogger);
+app.use(cookieParser());
 // обновление, вместо bodyParser
 app.use(express.json());
-
-app.all('*', auth, (req, res, next) => {
-  next(new StatusNotFound('Не существующий маршрут'));
-});
+// Cors
+app.use(cors({}));
+// подключаем роуты
+app.use(router);
+// подключаем логгер запросов
+app.use(requestLogger);
 
 // подключаем логгер ошибок
 app.use(errorLogger);

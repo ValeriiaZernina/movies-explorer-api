@@ -1,11 +1,11 @@
-require('dotenv').config();
-const bcrypt = require('bcrypt'); // импортируем bcrypt
-const jwt = require('jsonwebtoken');
-const userModel = require('../models/user');
-const { StatusBadRequest } = require('../utils/errors/StatusBadRequest');
-const { StatusNotFound } = require('../utils/errors/StatusNotFound');
-const { ConflictError } = require('../utils/errors/ConflictError');
-const { STATUS_CREATED, STATUS_OK } = require('../utils/errors/errorsCode');
+require("dotenv").config();
+const bcrypt = require("bcrypt"); // импортируем bcrypt
+const jwt = require("jsonwebtoken");
+const userModel = require("../models/user");
+const { StatusBadRequest } = require("../utils/errors/StatusBadRequest");
+const { StatusNotFound } = require("../utils/errors/StatusNotFound");
+const { ConflictError } = require("../utils/errors/ConflictError");
+const { STATUS_CREATED, STATUS_OK } = require("../utils/errors/errorsCode");
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -16,24 +16,28 @@ module.exports.createUser = (req, res, next) => {
 
   bcrypt
     .hash(password, 10)
-    .then((hash) => userModel.create({
-      email,
-      password: hash, // записываем хеш в базу
-      name,
-    }))
-    .then((user) => res.status(STATUS_CREATED).send({
-      email: user.email,
-      _id: user._id,
-      name: user.name,
-    }))
+    .then((hash) =>
+      userModel.create({
+        name,
+        email,
+        password: hash, // записываем хеш в базу
+      })
+    )
+    .then((user) =>
+      res.status(STATUS_CREATED).send({
+        email: user.email,
+        _id: user._id,
+        name: user.name,
+      })
+    )
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ConflictError('Пользователь уже существует'));
-      } else if (err.name === 'ValidationError') {
+        next(new ConflictError("Пользователь уже существует"));
+      } else if (err.name === "ValidationError") {
         next(
           new StatusBadRequest(
-            'Переданы некорректные данные при создании пользователя пользователя',
-          ),
+            "Переданы некорректные данные при создании пользователя пользователя"
+          )
         );
       } else {
         next(err);
@@ -56,15 +60,15 @@ module.exports.patchUserMe = (req, res, next) => {
     .findByIdAndUpdate(
       req.user._id,
       { name, email },
-      { new: true, runValidators: true },
+      { new: true, runValidators: true }
     )
     .orFail(() => {
       throw new StatusNotFound(`Пользователь с id=${req.user._id} не найден`);
     })
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new StatusBadRequest('Переданы некорректные данные'));
+      if (err.name === "ValidationError") {
+        next(new StatusBadRequest("Переданы некорректные данные"));
       } else {
         next(err);
       }
@@ -79,24 +83,28 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'SECRET',
+        NODE_ENV === "production" ? JWT_SECRET : "SECRET",
         {
           expiresIn: 1000 * 60 * 60 * 24 * 7,
-        },
+        }
       );
       res
         .cookie(
-          'authorization',
+          "authorization",
           token, // token - наш JWT токен, который мы отправляем
-          { maxAge: 3600000 * 24 * 7, httpOnly: true },
+          { maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: false }
         )
-        .send({ token });
+        .send({ message: "Пользователь успешно вошел в систему" });
     })
-    .catch(next);
+    .catch((err) => {
+      // очищаем куку при неудачном логине
+      res.clearCookie("authorization");
+      next(err); // пробрасываем ошибку дальше в центральный обработчик
+    });
 };
 
 module.exports.signout = (req, res) => {
-  res.clearCookie('authorization').send({
+  res.clearCookie("authorization").send({
     message: `Пользователь с id=${req.user._id} успешно вышел из системы`,
   });
 };
