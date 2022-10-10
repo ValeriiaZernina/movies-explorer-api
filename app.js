@@ -22,7 +22,12 @@ app.use(cookieParser());
 // обновление, вместо bodyParser
 app.use(express.json());
 // Cors
-app.use(cors({}));
+app.use(
+  cors({
+    origin: ['http://localhost:3001', 'http://localhost:3000'],
+    credentials: true,
+  }),
+);
 // подключаем роуты
 app.use(router);
 // подключаем логгер запросов
@@ -36,5 +41,5 @@ app.use(errors());
 app.use(handleError);
 
 app.listen(PORT, () => {
-  console.log(`Сервер запущен на ${PORT}`);
+  // console.log(`Сервер запущен на ${PORT}`);
 });
