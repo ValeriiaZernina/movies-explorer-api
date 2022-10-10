@@ -24,7 +24,13 @@ app.use(express.json());
 // Cors
 app.use(
   cors({
-    origin: ['http://localhost:3001', 'http://localhost:3000'],
+    origin: [
+      'https://api.zernina.nomoredomains.icu',
+      'https://zernina.nomoredomains.icu',
+      'http://zernina.nomoredomains.icu',
+      'http://localhost:3001',
+      'http://localhost:3000',
+    ],
     credentials: true,
   }),
 );
