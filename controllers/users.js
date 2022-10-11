@@ -86,7 +86,12 @@ module.exports.login = (req, res, next) => {
         .cookie(
           'jwt',
           token, // token - наш JWT токен, который мы отправляем
-          { maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: false },
+          {
+            maxAge: 3600000 * 24 * 7,
+            httpOnly: true,
+            sameSite: false,
+            secure: process.env.NODE_ENV === 'production',
+          },
         )
         .send({ message: 'Пользователь успешно вошел в систему' });
     })

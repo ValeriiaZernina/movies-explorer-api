@@ -7,14 +7,14 @@ const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 const { handleError } = require('./utils/handleError');
 const router = require('./routes/index');
-
+const { MONGO_DEV_URL } = require('./utils/config');
 // запуск на 3000 порту
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, NODE_ENV, MONGO_URL } = process.env;
 
 const app = express();
 
 // подключаемся к серверу mongo
-mongoose.connect('mongodb://localhost:27017/diplom', {
+mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : MONGO_DEV_URL, {
   useNewUrlParser: true,
 });
 
