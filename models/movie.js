@@ -13,8 +13,8 @@
 // nameRU — название фильма на русском языке. Обязательное поле-строка.
 // nameEN — название фильма на английском языке. Обязательное поле-строка.
 
-const mongoose = require('mongoose');
-const validator = require('validator');
+const mongoose = require("mongoose");
+const validator = require("validator");
 
 const movieSchema = new mongoose.Schema({
   country: { type: String, required: true },
@@ -37,10 +37,10 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: { validator: validator.isURL },
   },
-  owner: { required: true, type: mongoose.Schema.Types.ObjectId, ref: 'user' },
-  movieId: { type: String, required: true },
+  owner: { required: true, type: mongoose.Schema.Types.ObjectId, ref: "user" },
+  movieId: { type: Number, required: true },
   nameRU: { type: String, required: true },
   nameEN: { type: String, required: true },
 });
 
-module.exports = mongoose.model('movie', movieSchema);
+module.exports = mongoose.model("movie", movieSchema);
