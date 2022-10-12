@@ -1,4 +1,4 @@
-const MONGO_URL = "mongodb://127.0.0.1/moviesdb";
+const MONGO_URL = 'mongodb://localhost:27017/moviesdb';
 
 module.exports = {
   MONGO_URL,
