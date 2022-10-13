@@ -1,5 +1,5 @@
-const MONGO_URL = 'mongodb://localhost:27017/moviesdb';
+const MONGO_DEV_URL = 'mongodb://localhost:27017/moviesdb';
 
 module.exports = {
-  MONGO_URL,
+  MONGO_DEV_URL,
 };

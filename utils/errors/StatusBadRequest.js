@@ -1,5 +1,5 @@
 class StatusBadRequest extends Error {
-  constructor(message = "Переданы некорректные данные") {
+  constructor(message = 'Переданы некорректные данные') {
     super(message);
     this.statusCode = 400;
   }
