@@ -2,9 +2,9 @@ require("dotenv").config();
 const bcrypt = require("bcrypt"); // импортируем bcrypt
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/user");
-const { StatusBadRequest } = require("../utils/errors/StatusBadRequest");
-const { StatusNotFound } = require("../utils/errors/StatusNotFound");
-const { ConflictError } = require("../utils/errors/ConflictError");
+const StatusBadRequest = require("../utils/errors/StatusBadRequest");
+const StatusNotFound = require("../utils/errors/StatusNotFound");
+const ConflictError = require("../utils/errors/ConflictError");
 const { STATUS_CREATED, STATUS_OK } = require("../utils/errors/errorsCode");
 
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -60,17 +60,19 @@ module.exports.patchUserMe = (req, res, next) => {
       { name, email },
       { new: true, runValidators: true }
     )
-    .orFail(() => {
-      throw new StatusNotFound(`Пользователь с id=${req.user._id} не найден`);
-    })
-    .then((user) => res.send(user))
-    .catch((err) => {
-      if (err.name === "ValidationError") {
-        next(new StatusBadRequest("Переданы некорректные данные"));
-        return;
+    .then((user) => {
+      if (!user) {
+        throw new StatusNotFound(`Пользователь с id=${req.user._id} не найден`);
       }
+      res.send(user);
+    })
+    .catch((err) => {
       if (err.code === 11000) {
         next(new ConflictError("Пользователь с таким email уже существует"));
+        return;
+      }
+      if (err.name === "ValidationError") {
+        next(new StatusBadRequest("Переданы некорректные данные"));
         return;
       }
       if (err.name === "CastError") {

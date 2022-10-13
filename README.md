@@ -8,4 +8,4 @@ https://github.com/ValeriiaZernina/movies-explorer-api
 
 ### Деплой
 
-https://api.zernina.nomoredomains.icu
+http://api.zernina.nomoredomains.icu

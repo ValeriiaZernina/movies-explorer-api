@@ -1,6 +1,6 @@
-const { StatusBadRequest } = require("../utils/errors/StatusBadRequest");
-const { StatusNotFound } = require("../utils/errors/StatusNotFound");
-const { ForbiddenError } = require("../utils/errors/ForbiddenError");
+const StatusBadRequest = require("../utils/errors/StatusBadRequest");
+const StatusNotFound = require("../utils/errors/StatusNotFound");
+const ForbiddenError = require("../utils/errors/ForbiddenError");
 const { STATUS_CREATED } = require("../utils/errors/errorsCode");
 const movieModel = require("../models/movie");
 
