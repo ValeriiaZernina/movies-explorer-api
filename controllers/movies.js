@@ -27,13 +27,7 @@ module.exports.getMovies = (req, res, next) => {
   movieModel
     .find({ owner: id })
     .then((movies) => res.send(movies))
-    .catch((err) => {
-      if (err.name === "CastError") {
-        next(new StatusBadRequest("Некорректный id"));
-        return;
-      }
-      next(err);
-    });
+    .catch(next);
 };
 
 module.exports.deleteMovie = (req, res, next) => {
@@ -41,7 +35,7 @@ module.exports.deleteMovie = (req, res, next) => {
   movieModel
     .findById(id)
     .orFail(() => {
-      throw new StatusNotFound("Ничего не удалилось.");
+      throw new StatusNotFound("Фильм не найден!");
     })
     .then((movie) => {
       if (!movie.owner.equals(req.user._id)) {
@@ -49,6 +43,6 @@ module.exports.deleteMovie = (req, res, next) => {
       }
       return movie.deleteOne();
     })
-    .then(() => res.send({ message: "Карточка удалена." }))
+    .then(() => res.send({ message: "Фильм удален из вашего списка." }))
     .catch(next);
 };

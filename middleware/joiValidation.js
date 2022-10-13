@@ -1,5 +1,5 @@
-const { celebrate, Joi } = require("celebrate");
-const validator = require("validator");
+const { celebrate, Joi } = require('celebrate');
+const validator = require('validator');
 
 // валидация пользователя
 module.exports.validateSignIn = celebrate({
@@ -30,7 +30,7 @@ function validateURL(value, helpers) {
   if (validator.isURL(value)) {
     return value;
   }
-  return helpers.message("некорректный URL-адрес");
+  return helpers.message('некорректный URL-адрес');
 }
 
 module.exports.validateMoviePost = celebrate({
