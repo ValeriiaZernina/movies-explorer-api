@@ -114,6 +114,6 @@ module.exports.login = (req, res, next) => {
 
 module.exports.signout = (req, res) => {
   res.clearCookie('jwt').send({
-    message: `Пользователь с id=${req.user._id} успешно вышел из системы`,
+    message: 'Пользователь успешно вышел из системы',
   });
 };

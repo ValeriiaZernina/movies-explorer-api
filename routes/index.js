@@ -17,9 +17,9 @@ router.post('/signup', validateSignUp, createUser);
 // # и возвращает JWT
 // POST /signin
 router.post('/signin', validateSignIn, login);
+router.post('/signout', signout);
 
 router.use(auth);
-router.post('/signout', signout);
 router.use('/users', userRouter);
 router.use('/movies', movieRouter);
 
